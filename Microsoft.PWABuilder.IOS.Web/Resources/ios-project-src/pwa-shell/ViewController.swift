@@ -66,9 +66,12 @@ class ViewController: UIViewController, WKNavigationDelegate, UIDocumentInteract
         }
 
         if #available(iOS 15.0, *), adaptiveUIStyle {
-            themeObservation = PWAShell.webView.observe(\.underPageBackgroundColor) { [unowned self] webView, _ in
-                currentWebViewTheme = PWAShell.webView.underPageBackgroundColor.isLight() ?? true ? .light : .dark
+            themeObservation = PWAShell.webView.observe(\.themeColor) { [unowned self] webView, _ in
+                let backgroundColor = PWAShell.webView.underPageBackgroundColor;
+                let themeColor = PWAShell.webView.themeColor;
+                currentWebViewTheme = themeColor?.isLight() ?? backgroundColor?.isLight() ?? true ? .light : .dark
                 self.overrideUIStyle()
+                view.backgroundColor = themeColor ?? backgroundColor;
             }
         }
     }
